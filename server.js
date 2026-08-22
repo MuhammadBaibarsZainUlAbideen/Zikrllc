@@ -1,20 +1,15 @@
+require('dotenv').config();
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const mysql = require('mysql2/promise');
 
-const env = {};
-for (const line of fs.readFileSync(path.join(__dirname, '.env'), 'utf8').split('\n')) {
-  const m = line.match(/^\s*([\w.-]+)\s*=\s*(.*)?\s*$/);
-  if (m) env[m[1]] = m[2].trim().replace(/^["']|["']$/g, '');
-}
-
 const pool = mysql.createPool({
-  host: env.DB_HOST,
-  port: parseInt(env.DB_PORT || '3306'),
-  user: env.DB_USER,
-  password: env.DB_PASSWORD,
-  database: env.DB_NAME,
+  host: process.env.DB_HOST,
+  port: parseInt(process.env.DB_PORT || '3306'),
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
 });
 
 const server = http.createServer((req, res) => {
@@ -51,4 +46,5 @@ const server = http.createServer((req, res) => {
   res.end('Not found');
 });
 
-server.listen(3000, () => console.log('Running at http://localhost:3000'));
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => console.log(`Running on port ${PORT}`));
