@@ -1,7 +1,7 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
-const mysql = require('./db/node_modules/mysql2/promise');
+const mysql = require('mysql2/promise');
 
 const env = {};
 for (const line of fs.readFileSync(path.join(__dirname, '.env'), 'utf8').split('\n')) {
